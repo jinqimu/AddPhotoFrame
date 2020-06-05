@@ -3,17 +3,17 @@
 A script to frame the photos
 
 ![](https://img.shields.io/github/stars/jinqimu/addPhotoFrame)
-![](https://img.shields.io/badge/language-JavaScript-green)
+![](https://img.shields.io/badge/language-python-green)
 
 ## Example
 
 ### BEFORE
 
-![](https://cdn.jsdelivr.net/gh/jinqimu/cloudimg/img/20200605202803.jpg)
+<img src="https://cdn.jsdelivr.net/gh/jinqimu/cloudimg/img/20200605202803.jpg" width="200" />
 
 ### AFTER
 
-![](https://cdn.jsdelivr.net/gh/jinqimu/cloudimg/img/20200605181605.png)
+<img src="https://cdn.jsdelivr.net/gh/jinqimu/cloudimg/img/20200605181605.png" width="200" />
 
 ## How to use?
 
