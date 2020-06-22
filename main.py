@@ -90,7 +90,7 @@ def getData(file):
 
     try:
         tags = exifread.process_file(f, details=False)
-        # print(tags)
+        print(tags)
         try:
             _Model = str(tags['Image Model'])
         except:
@@ -168,7 +168,7 @@ if __name__ == "__main__":
 
     # _Model
     text = _Model
-    font_type = resource_path("source/DUBAI-BOLD.TTF")
+    font_type = resource_path("source/DUBAI_BOLD.TTF")
     font = ImageFont.truetype(font_type, 52)
     font_width, font_height = draw.textsize(text, font)
     draw.text((p_Model[0] - font_width / 2, p_Model[1] - font_height * 2 / 3),
