@@ -42,7 +42,7 @@ def Picture_Synthesis(M_Img,
     print("母图尺寸：", M_Img.size)
     S_Img_w, S_Img_h = S_Img.size  # 获取小图的大小（子图）
     print("子图尺寸：", S_Img.size)
-    factor = S_Img_w / M_Img_w
+    factor = max(S_Img_w / M_Img_w, S_Img_h/M_Img_h)
     print(factor)
 
     size_w = int(S_Img_w / factor)
@@ -128,6 +128,30 @@ def getData(file):
     print(_Model, _LensModel, _ISO, _F, _S, _EV)
     return(_Model, _LensModel, _ISO, _F, _S, _EV)
 
+def judge(pic):
+    img = Image.open(pic)
+    if (img.size[0] > img.size[1]):
+        mom = "source/background1.png"
+        p_son = (0, 270)
+
+        p_Model = (621, 1388)
+        p_LensModel = (621, 1493)
+        p_ISO = (286, 1826)
+        p_F = (515, 1826)
+        p_S = (740, 1826)
+        p_EV = (970, 1826)
+    else:
+        mom = "source/background2.png"
+        p_son = (160, 0)
+
+        p_Model = (1540, 525)
+        p_LensModel = (1540, 738)
+        p_ISO = (2010, 173)
+        p_F = (2010, 456)
+        p_S = (2010, 740)
+        p_EV = (2010, 1023)
+
+    return mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV
 
 if __name__ == "__main__":
     root = tk.Tk()
@@ -138,7 +162,8 @@ if __name__ == "__main__":
     print("Loading")
     _Model, _LensModel, _ISO, _F, _S, _EV = getData(son)
 
-    image = Image.open(resource_path("source/background.png"))
+    mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV = judge(son)
+    image = Image.open(resource_path(mom))
     draw = ImageDraw.Draw(image)
 
     # _Model
@@ -146,7 +171,7 @@ if __name__ == "__main__":
     font_type = resource_path("source/DUBAI-BOLD.TTF")
     font = ImageFont.truetype(font_type, 52)
     font_width, font_height = draw.textsize(text, font)
-    draw.text((621 - font_width / 2, 1388 - font_height * 2 / 3),
+    draw.text((p_Model[0] - font_width / 2, p_Model[1] - font_height * 2 / 3),
               text, "white", font)
 
     # _LensModel
@@ -154,7 +179,7 @@ if __name__ == "__main__":
     font_type = resource_path("source/ARIALN.TTF")
     font = ImageFont.truetype(font_type, 44)
     font_width, font_height = draw.textsize(text, font)
-    draw.text((621 - font_width / 2, 1493 - font_height * 2 / 3),
+    draw.text((p_LensModel[0] - font_width / 2, p_LensModel[1] - font_height * 2 / 3),
               text, "#848484", font)
 
     # params
@@ -162,31 +187,32 @@ if __name__ == "__main__":
     font_type = resource_path("source/Sony_Sketch_EF.ttf")
     font = ImageFont.truetype(font_type, 40)
     font_width, font_height = draw.textsize(text, font)
-    draw.text((286 - font_width / 2, 1826 - font_height * 2 / 3),
+    draw.text((p_ISO[0] - font_width / 2, p_ISO[1] - font_height * 2 / 3),
               text, "white", font)
 
     text = str(_F)
     # font_type = "source/Sony_Sketch_EF.ttf"
     font = ImageFont.truetype(font_type, 40)
     font_width, font_height = draw.textsize(text, font)
-    draw.text((515 - font_width / 2, 1826 - font_height * 2 / 3),
+    draw.text((p_F[0] - font_width / 2, p_F[1] - font_height * 2 / 3),
               text, "white", font)
 
     text = str(_S)
     # font_type = "source/Sony_Sketch_EF.ttf"
     font = ImageFont.truetype(font_type, 36)
     font_width, font_height = draw.textsize(text, font)
-    draw.text((740 - font_width / 2, 1826 - font_height * 2 / 3),
+    draw.text((p_S[0] - font_width / 2, p_S[1] - font_height * 2 / 3),
               text, "white", font)
 
     text = str(_EV)
     # font_type = "Sony_Sketch_EF.ttf"
     font = ImageFont.truetype(font_type, 40)
     font_width, font_height = draw.textsize(text, font)
-    draw.text((970 - font_width / 2, 1826 - font_height * 2 / 3),
+    draw.text((p_EV[0] - font_width / 2, p_EV[1] - font_height * 2 / 3),
               text, "white", font)
 
     print("输出的位置：")
     res = filedialog.askdirectory()
-    fileShortName = os.path.splitext(os.path.split(son)[1])[0]
-    Picture_Synthesis(image, son, "", (0, 270)).save(res+'/'+fileShortName+'_sol.png')
+    if(res):
+        fileShortName = os.path.splitext(os.path.split(son)[1])[0]
+        Picture_Synthesis(image, son, "", p_son).save(res+'/'+fileShortName+'_sol.png')
