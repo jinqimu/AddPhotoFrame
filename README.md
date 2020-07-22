@@ -42,9 +42,16 @@ Click **APF.exe**，then choose son_pic and output directory;
 
 ## Update history
 
+### 2020-07-22 v0.0.3
+
+* Fix bug: data formatting error.
+
+* improve loading sequence.(HTML)
+
 ### 2020-06-22 v0.0.2
-Add HTML version
+
+Add HTML version.
 
 ### 2020-06-05 v0.0.1
 
-START
+START.
