@@ -55,40 +55,38 @@ function judge(img) {
     return {mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV};
 }
 
-input.addEventListener('change', function (params) {
-    console.log(typeof(input.files[0]));
-    file = input.files[0];
+function process(file) {
     if (window.FileReader) {
         var reader = new FileReader();
-        
+
         reader.onload = function (e) {
             image = e.target.result;
             var can = document.getElementById("canvas");
-            
+
             var ctx = can.getContext('2d');
             var img = new Image();
-                        
-            img.onload = async function() {
+
+            img.onload = async function () {
                 console.log(getData(img));
-                if(img.width<img.height) {
+                if (img.width < img.height) {
                     can.setAttribute("width", "2208px");
                     can.setAttribute("height", "1242px");
                     ctx.drawImage(bg2, 0, 0);
                     // 图像，绘制起点xy，x缩放，y缩放
-                    ctx.drawImage(img, 160, 0, img.width*1242/img.height, 1242);
+                    ctx.drawImage(img, 160, 0, img.width * 1242 / img.height, 1242);
                 } else {
                     can.setAttribute("width", "1242px");
                     can.setAttribute("height", "2208px");
                     ctx.drawImage(bg1, 0, 0);
-                    ctx.drawImage(img, 0, 270, 1242, img.height*1242/img.width);
+                    ctx.drawImage(img, 0, 270, 1242, img.height * 1242 / img.width);
                 }
 
-                var {_Model, _LensModel, _ISO, _F, _S, _EV} = getData(img);
+                var { _Model, _LensModel, _ISO, _F, _S, _EV } = getData(img);
                 console.log(_Model);
-                
-                var {mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV} = judge(img);
+
+                var { mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV } = judge(img);
                 console.log(p_Model);
-                
+
                 // font
                 ctx.fillStyle = "white";
                 await loadFont();
@@ -106,7 +104,7 @@ input.addEventListener('change', function (params) {
                 document.fonts.add(ARIALN);
                 ctx.font = "40px ARIALN";
                 console.log(ctx.font);
-                
+
                 text_size = ctx.measureText(text);
                 [font_width, font_height] = [text_size.width, text_size.actualBoundingBoxAscent];
                 ctx.fillText(text, p_LensModel[0] - font_width / 2, p_LensModel[1] + font_height * 1 / 3);
@@ -131,20 +129,20 @@ input.addEventListener('change', function (params) {
                         return arguments.callee(b, a % b);
                     }
                     let temp = gcd(_S.numerator, _S.denominator)
-                    text = _S.numerator/temp + '/' + _S.denominator/temp;
+                    text = _S.numerator / temp + '/' + _S.denominator / temp;
                 } catch (error) {
                     text = "--";
-                } 
+                }
                 ctx.font = "34px Sony_Sketch_EF";
                 console.log(_S);
-                
+
                 text_size = ctx.measureText(text);
                 [font_width, font_height] = [text_size.width, text_size.actualBoundingBoxAscent];
                 ctx.fillText(text, p_S[0] - font_width / 2, p_S[1] + font_height * 1 / 3);
 
                 text = Math.round(_EV * 100) / 100;
                 if (isNaN(text)) text = "--";
-                console.log(typeof(_EV));
+                console.log(typeof (_EV));
                 ctx.font = "40px Sony_Sketch_EF";
                 text_size = ctx.measureText(text);
                 [font_width, font_height] = [text_size.width, text_size.actualBoundingBoxAscent];
@@ -156,4 +154,76 @@ input.addEventListener('change', function (params) {
         }
         reader.readAsDataURL(file);
     }
+}
+
+input.addEventListener('change', function (params) {
+    console.log(typeof(input.files[0]));
+    file = input.files[0];
+    process(file);
 })
+
+// 拖拽上传图片
+function pic_drag() {
+
+    function getDropFileCallBack(dropFile) {
+        // console.log("all ok")
+        console.log(("area yes"));
+        if (dropFile.type.match(/image*/)) {
+            console.log("YES");
+            process(dropFile);
+        } else {
+            console.log("此" + dropFile.name + "不是图片文件！");
+        }
+    }
+
+    var dropZone = document.getElementsByTagName("html")[0];
+    var area = document.getElementsByTagName("html")[0];
+    console.log(area);
+
+    document.addEventListener("mouseover", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }, false);
+
+    dropZone.addEventListener("drop", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var df = e.dataTransfer;
+        var dropFiles = []; // 拖拽的文件，会放到这里
+        var dealFileCnt = 0; // 读取文件是个异步的过程，需要记录处理了多少个文件了
+        var allFileLen = df.files.length; // 所有的文件的数量，给非Chrome浏览器使用的变量
+
+        // 检测是否已经把所有的文件都遍历过了
+        function checkDropFinish() {
+            if (dealFileCnt === allFileLen - 1) {
+                for (var i = 0; i < allFileLen; i++) {
+                    getDropFileCallBack(dropFiles[i]);
+                }
+            }
+            dealFileCnt++;
+        }
+
+        if (df.items !== undefined) {
+            // Chrome拖拽文件逻辑
+            for (var i = 0; i < df.items.length; i++) {
+                var item = df.items[i];
+                if (item.kind === "file" && item.webkitGetAsEntry().isFile) {
+                    var file = item.getAsFile();
+                    dropFiles.push(file);
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        getDropFileCallBack(file);
+                    }
+                    reader.readAsDataURL(file);
+                } else if (item.type.match(/plain*/))
+                    item.getAsString(function (str) {
+                        console.log(str);
+                        // neirong.value += str;
+                    });
+            }
+        }
+    }, false);
+}
+// 拖拽end
+pic_drag();
