@@ -42,6 +42,10 @@ Click **APF.exe**，then choose son_pic and output directory;
 
 ## Update history
 
+### 2020-08-07 v0.0.4
+
+add pic_drag(HTML)
+
 ### 2020-07-22 v0.0.3
 
 * Fix bug: data formatting error.
