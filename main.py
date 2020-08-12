@@ -128,7 +128,7 @@ def getData(file):
     print(_Model, _LensModel, _ISO, _F, _S, _EV)
     return(_Model, _LensModel, _ISO, _F, _S, _EV)
 
-def judge(pic):
+def position(pic):
     img = Image.open(pic)
     if (img.size[0] > img.size[1]):
         mom = "source/background1.png"
@@ -154,6 +154,7 @@ def judge(pic):
     return mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV
 
 if __name__ == "__main__":
+    print("v0.0.5, update date:2020-08-12.")
     root = tk.Tk()
     root.withdraw()
 
@@ -162,7 +163,7 @@ if __name__ == "__main__":
     print("Loading")
     _Model, _LensModel, _ISO, _F, _S, _EV = getData(son)
 
-    mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV = judge(son)
+    mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV = position(son)
     image = Image.open(resource_path(mom))
     draw = ImageDraw.Draw(image)
 

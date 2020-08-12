@@ -6,6 +6,8 @@ const DUBAI_BOLD = new FontFace('DUBAI_BOLD', 'url(./source/DUBAI_BOLD.TTF)');
 const ARIALN = new FontFace('ARIALN', 'url(./source/ARIALN.TTF)');
 const Sony_Sketch_EF = new FontFace('Sony_Sketch_EF', 'url(./source/Sony_Sketch_EF.ttf)');
 
+console.log("v0.0.5, update date:2020-08-12.");
+
 function loadFont(params) {
     DUBAI_BOLD.load();
     ARIALN.load();
@@ -28,7 +30,7 @@ function getData(img) {
     return {_Model, _LensModel, _ISO, _F, _S, _EV};
 }
 
-function judge(img) {
+function position(img) {
     var mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV;
     if (img.width < img.height) {
         mom = bg1;
@@ -84,7 +86,7 @@ function process(file) {
                 var { _Model, _LensModel, _ISO, _F, _S, _EV } = getData(img);
                 console.log(_Model);
 
-                var { mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV } = judge(img);
+                var { mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV } = position(img);
                 console.log(p_Model);
 
                 // font
@@ -96,7 +98,7 @@ function process(file) {
                 ctx.font = "52px DUBAI_BOLD";
                 text_size = ctx.measureText(text);
                 [font_width, font_height] = [text_size.width, text_size.actualBoundingBoxAscent];
-                ctx.fillText(text, p_Model[0] - font_width / 2, p_Model[1] + font_height * 1 / 3);
+                ctx.fillText(text, p_Model[0] - font_width / 2, p_Model[1] + font_height * 2 / 3);
 
                 // _LensModel
                 ctx.fillStyle = "#848484";
@@ -107,7 +109,7 @@ function process(file) {
 
                 text_size = ctx.measureText(text);
                 [font_width, font_height] = [text_size.width, text_size.actualBoundingBoxAscent];
-                ctx.fillText(text, p_LensModel[0] - font_width / 2, p_LensModel[1] + font_height * 1 / 3);
+                ctx.fillText(text, p_LensModel[0] - font_width / 2, p_LensModel[1] + font_height * 2 / 3);
 
                 // params
                 ctx.fillStyle = "white";
@@ -116,12 +118,12 @@ function process(file) {
                 ctx.font = "40px Sony_Sketch_EF"
                 text_size = ctx.measureText(text);
                 [font_width, font_height] = [text_size.width, text_size.actualBoundingBoxAscent];
-                ctx.fillText(text, p_ISO[0] - font_width / 2, p_ISO[1] + font_height * 1 / 3);
+                ctx.fillText(text, p_ISO[0] - font_width / 2, p_ISO[1] + font_height * 2 / 3);
 
                 text = _F || "--";
                 text_size = ctx.measureText(text);
                 [font_width, font_height] = [text_size.width, text_size.actualBoundingBoxAscent];
-                ctx.fillText(text, p_F[0] - font_width / 2, p_F[1] + font_height * 1 / 3);
+                ctx.fillText(text, p_F[0] - font_width / 2, p_F[1] + font_height * 2 / 3);
 
                 try {
                     function gcd(a, b) {
@@ -138,7 +140,7 @@ function process(file) {
 
                 text_size = ctx.measureText(text);
                 [font_width, font_height] = [text_size.width, text_size.actualBoundingBoxAscent];
-                ctx.fillText(text, p_S[0] - font_width / 2, p_S[1] + font_height * 1 / 3);
+                ctx.fillText(text, p_S[0] - font_width / 2, p_S[1] + font_height * 2 / 3);
 
                 text = Math.round(_EV * 100) / 100;
                 if (isNaN(text)) text = "--";
@@ -146,7 +148,7 @@ function process(file) {
                 ctx.font = "40px Sony_Sketch_EF";
                 text_size = ctx.measureText(text);
                 [font_width, font_height] = [text_size.width, text_size.actualBoundingBoxAscent];
-                ctx.fillText(text, p_EV[0] - font_width / 2, p_EV[1] + font_height * 1 / 3);
+                ctx.fillText(text, p_EV[0] - font_width / 2, p_EV[1] + font_height * 2 / 3);
 
                 img1.src = can.toDataURL('image/png');
             }
