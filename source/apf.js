@@ -6,7 +6,7 @@ const DUBAI_BOLD = new FontFace('DUBAI_BOLD', 'url(./source/DUBAI_BOLD.TTF)');
 const ARIALN = new FontFace('ARIALN', 'url(./source/ARIALN.TTF)');
 const Sony_Sketch_EF = new FontFace('Sony_Sketch_EF', 'url(./source/Sony_Sketch_EF.ttf)');
 
-console.log("v0.0.5, update date:2020-08-12.");
+console.log("APF v0.0.6, update date:2020-08-14.");
 
 function loadFont(params) {
     DUBAI_BOLD.load();
@@ -168,7 +168,6 @@ input.addEventListener('change', function (params) {
 function pic_drag() {
 
     function getDropFileCallBack(dropFile) {
-        // console.log("all ok")
         console.log(("area yes"));
         if (dropFile.type.match(/image*/)) {
             console.log("YES");
@@ -178,9 +177,11 @@ function pic_drag() {
         }
     }
 
-    var dropZone = document.getElementsByTagName("html")[0];
-    var area = document.getElementsByTagName("html")[0];
-    console.log(area);
+    var dropZone = document.getElementById("drag");
+
+    dropZone.addEventListener("focus", function () {  //防止弹出键盘
+        document.activeElement.blur();
+    })
 
     document.addEventListener("mouseover", function (e) {
         e.preventDefault();

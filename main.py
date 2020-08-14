@@ -154,7 +154,7 @@ def position(pic):
     return mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV
 
 if __name__ == "__main__":
-    print("v0.0.5, update date:2020-08-12.")
+    print("APF v0.0.6, update date:2020-08-14.")
     root = tk.Tk()
     root.withdraw()
 
