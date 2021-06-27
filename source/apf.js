@@ -5,6 +5,7 @@ var bg2 = document.getElementById("background2");
 const DUBAI_BOLD = new FontFace('DUBAI_BOLD', 'url(./source/DUBAI_BOLD.TTF)');
 const ARIALN = new FontFace('ARIALN', 'url(./source/ARIALN.TTF)');
 const Sony_Sketch_EF = new FontFace('Sony_Sketch_EF', 'url(./source/Sony_Sketch_EF.ttf)');
+const FREESCPT = new FontFace('FREESCPT', 'url(./source/FREESCPT.TTF)');
 
 console.log("APF v0.0.6, update date:2020-08-14.");
 
@@ -12,10 +13,11 @@ function loadFont(params) {
     DUBAI_BOLD.load();
     ARIALN.load();
     Sony_Sketch_EF.load();
+    FREESCPT.load();
 } loadFont();
 
 function getData(img) {
-    var _Model, _LensModel, _ISO, _F, _S, _EV;
+    var _Model, _LensModel, _ISO, _F, _S, _EV, _Make;
     EXIF.getData(img, function() {
         var data = EXIF.getAllTags(this);
         console.log(data);
@@ -26,14 +28,32 @@ function getData(img) {
         _F = data['FNumber'];
         _S = data['ExposureTime'];
         _EV = data['ExposureBias'];
+        _Make = data['Make']
     });
-    return {_Model, _LensModel, _ISO, _F, _S, _EV};
+
+    if (_Make.includes('RICOH')) {
+        if (_Model.includes('PENTAX'))
+            _Make = "Pentax";
+        else
+            _Make = "Ricoh";
+    }
+    if (_Make.includes('NIKON'))
+        _Make = "Nikon";
+    if (_Make.includes('SONY'))
+        _Make = "Sony";
+    if (_Make.includes('FUJIFILM')) {
+        _Make = "Fujifilm";
+        console.log(_LensModel + "!")
+        _LensModel = _LensModel.replace(/\u0000/g, '').replace(/\\u0000/g, ""); //做两次replace消除null
+    }
+
+    return {_Model, _LensModel, _ISO, _F, _S, _EV, _Make};
 }
 
 function position(img) {
-    var mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV;
+    var mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV, p_brand;
     if (img.width < img.height) {
-        mom = bg1;
+        mom = bg2;
         p_son = [160, 0];
 
         p_Model = [1540, 525];
@@ -42,8 +62,9 @@ function position(img) {
         p_F = [2010, 456];
         p_S = [2010, 740];
         p_EV = [2010, 1023];
+        p_brand = [1140, 621];
     } else {
-        mom = bg2;
+        mom = bg1;
         p_son = [0, 270];
 
         p_Model = [621, 1388];
@@ -52,9 +73,10 @@ function position(img) {
         p_F = [515, 1826];
         p_S = [740, 1826];
         p_EV = [970, 1826];
+        p_brand = [621, 1258];
     }
     
-    return {mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV};
+    return {mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV, p_brand};
 }
 
 function process(file) {
@@ -83,15 +105,35 @@ function process(file) {
                     ctx.drawImage(img, 0, 270, 1242, img.height * 1242 / img.width);
                 }
 
-                var { _Model, _LensModel, _ISO, _F, _S, _EV } = getData(img);
+                var { _Model, _LensModel, _ISO, _F, _S, _EV, _Make } = getData(img);
                 console.log(_Model);
 
-                var { mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV } = position(img);
+                var { mom, p_son, p_Model, p_LensModel, p_ISO, p_F, p_S, p_EV, p_brand } = position(img);
                 console.log(p_Model);
+
+                // add brand
+                ctx.arc(p_brand[0], p_brand[1], 50, 0, 360, false);
+                ctx.fillStyle = "#d02e26";
+                ctx.fill();
+                await loadFont();
+                document.fonts.add(FREESCPT);
+                ctx.font = "56px FREESCPT";
+                text = _Make;
+                if (text.length <= 4) ctx.font = "62px FREESCPT";
+                text_size = ctx.measureText(text);
+                [font_width, font_height] = [text_size.width, text_size.actualBoundingBoxAscent];
+                if (font_width > 100) {
+                    ctx.font = "48px FREESCPT";
+                    text_size = ctx.measureText(text);
+                    [font_width, font_height] = [text_size.width, text_size.actualBoundingBoxAscent];
+                    ctx.arc(p_brand[0], p_brand[1], font_width/2+5, 0, 360, false);
+                    ctx.fill();
+                }
+                ctx.fillStyle = "white";
+                ctx.fillText(text, p_brand[0]-font_width/2, p_brand[1]+font_height/3);
 
                 // font
                 ctx.fillStyle = "white";
-                await loadFont();
                 // _Model
                 text = _Model || "--";
                 document.fonts.add(DUBAI_BOLD);
@@ -120,7 +162,7 @@ function process(file) {
                 [font_width, font_height] = [text_size.width, text_size.actualBoundingBoxAscent];
                 ctx.fillText(text, p_ISO[0] - font_width / 2, p_ISO[1] + font_height * 2 / 3);
 
-                text = _F || "--";
+                text = _F.toFixed(1) || "--";
                 text_size = ctx.measureText(text);
                 [font_width, font_height] = [text_size.width, text_size.actualBoundingBoxAscent];
                 ctx.fillText(text, p_F[0] - font_width / 2, p_F[1] + font_height * 2 / 3);
