@@ -29,6 +29,8 @@ run `python ./main.py` in shell, choose son_pic and output directory;
 
 Click **APF.html**，then choose son_pic;
 
+You can try on **[this website](https://jinqimu.github.io/apf)**
+
 ### EXE (independent)
 
 Click **APF.exe**，then choose son_pic and output directory;
