@@ -7,7 +7,7 @@ const ARIALN = new FontFace('ARIALN', 'url(./source/ARIALN.TTF)');
 const Sony_Sketch_EF = new FontFace('Sony_Sketch_EF', 'url(./source/Sony_Sketch_EF.ttf)');
 const FREESCPT = new FontFace('FREESCPT', 'url(./source/FREESCPT.TTF)');
 
-console.log("APF v0.0.6, update date:2020-08-14.");
+console.log("APF v0.0.7, update date:2021-06-27.");
 
 function loadFont(params) {
     DUBAI_BOLD.load();

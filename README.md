@@ -35,12 +35,25 @@ Click **APF.exe**，then choose son_pic and output directory;
 
 ## What needs to be fixed (or new feature)
 
-- [ ] The LOGO;
 - [ ] Can't process a photo with very small pixels;
 - [ ] Can't process some RAW, such as CR2, PEF, RAF...(buut I don't want to fix it);
 - [x] ~~process both landscape mode and portrait mode~~
+- [x] The LOGO;
 
 ## Update history
+
+### 2021-06-27 v0.0.7
+
+Fix bugs & add brand LOGO
+
+I test LOGOs of following brands:
+* Canon
+* Nikon
+* Fujifilm
+* Sony
+* Pentax
+
+*Notice: Only JS version will be updated this time*
 
 ### 2020-09-12 v0.0.5
 
